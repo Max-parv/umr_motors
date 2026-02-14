@@ -1,0 +1,40 @@
+{% extends "base.html" %} {% block content %}
+
+<div class="card premium-card p-4">
+  <h3 class="mb-3"><i class="bi bi-tools me-2"></i> Your Booking Status</h3>
+
+  <p class="text-muted"><strong>Mobile:</strong> {{ phone }}</p>
+
+  <table class="table table-hover mt-4 align-middle">
+    <thead class="table-dark">
+      <tr>
+        <th><i class="bi bi-car-front"></i> Vehicle</th>
+        <th><i class="bi bi-chat-left-text"></i> Problem</th>
+        <th><i class="bi bi-check-circle"></i> Status</th>
+        <th><i class="bi bi-calendar-event"></i> Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for booking in bookings %}
+      <tr>
+        <td>{{ booking.vehicle_type }}</td>
+        <td>{{ booking.problem_description }}</td>
+        <td>
+          {% if booking.status == "Pending" %}
+          <span class="badge bg-danger px-3 py-2">Pending</span>
+          {% elif booking.status == "In Progress" %}
+          <span class="badge bg-warning text-dark px-3 py-2">In Progress</span>
+          {% elif booking.status == "Completed" %}
+          <span class="badge bg-success px-3 py-2">Completed</span>
+          {% endif %}
+        </td>
+        <td>{{ booking.booking_date|date:"d M Y - h:i A" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <a href="/track/" class="btn btn-outline-secondary mt-3"> Back </a>
+</div>
+
+{% endblock %}

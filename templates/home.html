@@ -1,0 +1,115 @@
+{% extends "base.html" %} {% block content %}
+
+<!-- HERO SECTION -->
+<div
+  class="text-center text-white rounded-4 p-5 mb-5"
+  style="
+    background:
+      linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+      url(&quot;https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?q=80&w=2070&quot;)
+        center/cover;
+  "
+>
+  <h1 class="display-4 fw-bold">Professional Car & Bike Repair</h1>
+  <p class="lead">Fast • Reliable • Affordable</p>
+
+  <a href="{% url 'booking' %}" class="btn btn-warning btn-lg mt-3 me-2">
+    Book Now
+  </a>
+
+  <a
+    href="{% url 'customer_login' %}"
+    class="btn btn-outline-light btn-lg mt-3"
+  >
+    Track Booking
+  </a>
+
+  {% if user.is_authenticated %}
+  <div class="mt-3">
+    <a href="{% url 'manage_bookings' %}" class="btn btn-dark"> Admin Panel </a>
+  </div>
+  {% endif %}
+</div>
+
+<!-- SERVICES -->
+<h2 class="text-center mb-4">Our Services</h2>
+
+<div class="row text-center mb-5">
+  <div class="col-md-4">
+    <div class="card premium-card p-4">
+      <i class="bi bi-car-front display-4 text-primary"></i>
+      <h5 class="mt-3">General Service</h5>
+      <p>Complete inspection and servicing of your vehicle.</p>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card premium-card p-4">
+      <i class="bi bi-tools display-4 text-success"></i>
+      <h5 class="mt-3">Engine Repair</h5>
+      <p>Professional engine diagnostics and repair.</p>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card premium-card p-4">
+      <i class="bi bi-battery-charging display-4 text-warning"></i>
+      <h5 class="mt-3">Battery & Electrical</h5>
+      <p>Electrical system check and battery replacement.</p>
+    </div>
+  </div>
+</div>
+
+<!-- TESTIMONIALS -->
+<h2 class="text-center mb-4">What Our Customers Say</h2>
+
+<div class="row mb-5">
+  <div class="col-md-4">
+    <div class="card premium-card p-4">
+      <p>"Excellent service! My car runs like new."</p>
+      <strong>- Rahul Sharma</strong>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card premium-card p-4">
+      <p>"Quick and reliable. Highly recommended."</p>
+      <strong>- Priya Mehta</strong>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card premium-card p-4">
+      <p>"Transparent pricing and professional staff."</p>
+      <strong>- Amit Verma</strong>
+    </div>
+  </div>
+</div>
+
+<!-- LOCATION SECTION -->
+<h2 class="text-center mt-5 mb-4">
+  <i class="bi bi-geo-alt-fill text-danger me-2"></i> Our Location
+</h2>
+
+<div class="card premium-card p-3 mb-5">
+  <div class="ratio ratio-16x9">
+    <iframe
+      src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3668.20818184203!2d77.46732297531801!3d23.16260077907588!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMjPCsDA5JzQ1LjQiTiA3N8KwMjgnMTEuNiJF!5e0!3m2!1sen!2sin!4v1771072490212!5m2!1sen!2sin"
+      style="border: 0"
+      allowfullscreen=""
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+    >
+    </iframe>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<div class="text-center mb-5">
+  <h3>Contact Us</h3>
+  <p><strong>📍 Location:</strong> Main Road, Bhopal</p>
+  <p><strong>📞 Phone:</strong> +91 9876543210</p>
+  <p><strong>🕒 Working Hours:</strong> 9:00 AM – 8:00 PM</p>
+</div>
+
+{% endblock %}
