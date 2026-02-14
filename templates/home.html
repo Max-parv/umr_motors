@@ -1,25 +1,44 @@
 {% extends "base.html" %} {% block content %}
 
 <!-- HERO -->
-<div class="hero-section text-white text-center mb-5">
-  <h1 class="display-4 fw-bold">U.M.R Motors</h1>
-  <p class="lead">Complete Car Care Solution</p>
+<div class="hero-section text-center text-white mb-5">
+  <div class="container py-5">
+    <h1 class="display-2 fw-bold text-warning" style="letter-spacing: 3px">
+      U.M.R MOTORS
+    </h1>
 
-  <div class="mt-3">
-    <a href="{% url 'booking' %}" class="btn btn-danger btn-lg me-2">
+    <h4 class="fw-light mb-3">Complete Car Care Solution</h4>
+
+    <p class="lead mb-4">
+      Mechanical Service • Accident Repair • Denting & Painting • Insurance
+      Claims • Interior Cleaning
+    </p>
+
+    <a
+      href="{% url 'booking' %}"
+      class="btn btn-danger btn-lg px-5 me-3 shadow"
+    >
       Book Service Now
     </a>
 
-    <a href="tel:9714004120" class="btn btn-outline-light btn-lg"> Call Now </a>
-  </div>
+    <a
+      href="{% url 'customer_login' %}"
+      class="btn btn-outline-light btn-lg px-4"
+    >
+      Track Booking
+    </a>
 
-  <div class="mt-4">
-    <p class="mb-1">📞 9714004120 | 9575589976</p>
-    <p>📍 Bagli Road, Misrod, Bhopal</p>
+    <div class="mt-4 fs-5">
+      <i class="bi bi-telephone-fill text-warning me-2"></i>
+      9714004120 | 9575589976
+    </div>
+
+    <div class="mt-2">
+      <i class="bi bi-geo-alt-fill text-danger me-2"></i>
+      Bagli Road, Misrod, Bhopal
+    </div>
   </div>
 </div>
-
-<h2 class="text-center mb-4">Our Services</h2>
 
 <!--SERVICE section-->
 
