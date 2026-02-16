@@ -1,4 +1,19 @@
-{% extends "base.html" %} {% block content %}
+{% extends "base.html" %} {% block content %} {% if booking_id %}
+<div class="alert alert-success text-center shadow-lg rounded-4 mb-4">
+  <h4 class="fw-bold text-success">🎉 Booking Confirmed Successfully!</h4>
+  <p class="mb-1">
+    Your Booking ID:
+    <strong class="text-dark fs-5"> {{ booking_id|slice:":8" }} </strong>
+  </p>
+  <p class="small text-muted">Please save this ID for tracking your service.</p>
+</div>
+
+<script>
+  setTimeout(function () {
+    document.querySelector(".alert").style.display = "none";
+  }, 6000);
+</script>
+{% endif %}
 
 <!-- HERO SECTION -->
 <div
@@ -35,6 +50,8 @@
     Bagli Road, Misrod, Bhopal
   </div>
 </div>
+
+{% endblock %}
 
 <!-- WHY CHOOSE US -->
 <div class="row text-center mb-5">

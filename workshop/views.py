@@ -1,16 +1,16 @@
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import get_object_or_404
 from .models import Booking
 
 
+# HOME VIEW
 def home(request):
-    total_bookings = Booking.objects.count()
-    return render(request, 'home.html', {
-        'total_bookings': total_bookings
-    })
+    booking_id = request.session.pop('latest_booking_id', None)
+    return render(request, 'home.html', {'booking_id': booking_id})
 
 
+# BOOKING VIEW
 def booking(request):
     if request.method == "POST":
         name = request.POST.get('name')
@@ -18,17 +18,36 @@ def booking(request):
         vehicle_type = request.POST.get('vehicle_type')
         problem_description = request.POST.get('problem_description')
 
-        Booking.objects.create(
+        booking = Booking.objects.create(
             name=name,
             phone=phone,
             vehicle_type=vehicle_type,
             problem_description=problem_description
         )
 
-        messages.success(request, "Booking submitted successfully!")
+        request.session['latest_booking_id'] = str(booking.booking_id)
+
         return redirect('home')
 
     return render(request, 'booking.html')
+
+
+# ADMIN MANAGE BOOKINGS
+@login_required
+def manage_bookings(request):
+    if request.method == "POST":
+        booking_id = request.POST.get("booking_id")
+        status = request.POST.get("status")
+
+        booking = get_object_or_404(Booking, id=booking_id)
+        booking.status = status
+        booking.save()
+
+        return redirect("manage_bookings")
+
+    bookings = Booking.objects.all().order_by("-booking_date")
+    return render(request, "manage_booking.html", {"bookings": bookings})
+
 
 
 @login_required
