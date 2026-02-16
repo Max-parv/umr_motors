@@ -26,7 +26,7 @@ def booking(request):
         )
 
         messages.success(request, "Booking submitted successfully!")
-        return redirect('booking')
+        return redirect('home')
 
     return render(request, 'booking.html')
 
