@@ -1,12 +1,15 @@
-from workshop.views import home, booking, dashboard, manage_bookings, customer_login
 from django.contrib import admin
 from django.urls import path
+from workshop import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', home, name='home'),
-    path('booking/', booking, name='booking'),
-    path('dashboard/', dashboard, name='dashboard'),
-    path('manage-bookings/', manage_bookings, name='manage_bookings'),
-    path('track/', customer_login, name='customer_login'),  # NEW
+
+    path('', views.home, name='home'),
+    path('booking/', views.booking, name='booking'),
+
+    path('dashboard/', views.dashboard, name='dashboard'),
+    path('manage-bookings/', views.manage_bookings, name='manage_bookings'),
+
+    path('track/', views.customer_login, name='customer_login'),
 ]

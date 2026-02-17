@@ -1,16 +1,20 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404
+from django.contrib import messages
 from .models import Booking
 
 
+# ==============================
 # HOME VIEW
+# ==============================
 def home(request):
     booking_id = request.session.pop('latest_booking_id', None)
     return render(request, 'home.html', {'booking_id': booking_id})
 
 
+# ==============================
 # BOOKING VIEW
+# ==============================
 def booking(request):
     if request.method == "POST":
         name = request.POST.get('name')
@@ -26,52 +30,31 @@ def booking(request):
         )
 
         request.session['latest_booking_id'] = str(booking.booking_id)
-
         return redirect('home')
 
     return render(request, 'booking.html')
 
 
-# ADMIN MANAGE BOOKINGS
-@login_required
-def manage_bookings(request):
-    if request.method == "POST":
-        booking_id = request.POST.get("booking_id")
-        status = request.POST.get("status")
-
-        booking = get_object_or_404(Booking, id=booking_id)
-        booking.status = status
-        booking.save()
-
-        return redirect("manage_bookings")
-
-    bookings = Booking.objects.all().order_by("-booking_date")
-    return render(request, "manage_booking.html", {"bookings": bookings})
-
-
+# ==============================
+# ADMIN DASHBOARD
+# ==============================
 @login_required
 def dashboard(request):
-    total = Booking.objects.count()
-    pending = Booking.objects.filter(status='Pending').count()
-    in_progress = Booking.objects.filter(status='In Progress').count()
-    completed = Booking.objects.filter(status='Completed').count()
-
     context = {
-        'total': total,
-        'pending': pending,
-        'in_progress': in_progress,
-        'completed': completed,
+        'total': Booking.objects.count(),
+        'pending': Booking.objects.filter(status='Pending').count(),
+        'in_progress': Booking.objects.filter(status='In Progress').count(),
+        'completed': Booking.objects.filter(status='Completed').count(),
     }
-
     return render(request, 'dashboard.html', context)
 
 
+# ==============================
+# ADMIN MANAGE BOOKINGS
+# ==============================
 @login_required
 def manage_bookings(request):
-    # SEARCH
     search_query = request.GET.get("search", "")
-    
-    # FILTER
     status_filter = request.GET.get("status", "")
 
     bookings = Booking.objects.all().order_by("-booking_date")
@@ -82,7 +65,6 @@ def manage_bookings(request):
     if status_filter:
         bookings = bookings.filter(status=status_filter)
 
-    # UPDATE STATUS
     if request.method == "POST":
         booking_id = request.POST.get("booking_id")
         action = request.POST.get("action")
@@ -98,14 +80,16 @@ def manage_bookings(request):
 
         return redirect("manage_bookings")
 
-    context = {
+    return render(request, "manage_booking.html", {
         "bookings": bookings,
         "search_query": search_query,
         "status_filter": status_filter,
-    }
+    })
 
-    return render(request, "manage_booking.html", context)
 
+# ==============================
+# CUSTOMER TRACKING (NO OTP)
+# ==============================
 def customer_login(request):
     if request.method == "POST":
         phone = request.POST.get("phone")
@@ -118,9 +102,7 @@ def customer_login(request):
                 "phone": phone
             })
         else:
-            return render(request, "customer_login.html", {
-                "error": "No bookings found for this number."
-            })
+            messages.error(request, "No bookings found for this number.")
+            return redirect("customer_login")
 
     return render(request, "customer_login.html")
-
