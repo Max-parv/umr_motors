@@ -13,9 +13,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # -------------------------------------------------
 SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key")
 
-DEBUG = os.environ.get("DEBUG", "True") == "False"
+DEBUG = os.environ.get("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = ['*']  # Replace with domain in production
+ALLOWED_HOSTS = ['umr-motors.onrender.com']
 
 
 # -------------------------------------------------
@@ -44,10 +44,6 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'garage.urls'
 
-
-# -------------------------------------------------
-# Templates
-# -------------------------------------------------
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -67,13 +63,13 @@ WSGI_APPLICATION = 'garage.wsgi.application'
 
 
 # -------------------------------------------------
-# Database (SQLite locally, PostgreSQL on Render)
+# Database (Render PostgreSQL via DATABASE_URL)
 # -------------------------------------------------
 DATABASES = {
     'default': dj_database_url.config(
-        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        default=os.environ.get("DATABASE_URL"),
         conn_max_age=600,
-        ssl_require=not DEBUG
+        ssl_require=True
     )
 }
 
@@ -93,9 +89,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # -------------------------------------------------
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'Asia/Kolkata'
-
 USE_I18N = True
 USE_TZ = True
 
@@ -105,7 +99,6 @@ USE_TZ = True
 # -------------------------------------------------
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
