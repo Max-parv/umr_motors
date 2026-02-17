@@ -49,7 +49,6 @@ def manage_bookings(request):
     return render(request, "manage_booking.html", {"bookings": bookings})
 
 
-
 @login_required
 def dashboard(request):
     total = Booking.objects.count()
