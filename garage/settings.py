@@ -2,6 +2,7 @@ from pathlib import Path
 import os
 import dj_database_url
 
+
 # -------------------------------------------------
 # Base Directory
 # -------------------------------------------------
@@ -15,7 +16,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key")
 
 DEBUG = os.environ.get("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = ['umr-motors.onrender.com']
+ALLOWED_HOSTS = ["*"]
 
 
 # -------------------------------------------------
@@ -63,15 +64,26 @@ WSGI_APPLICATION = 'garage.wsgi.application'
 
 
 # -------------------------------------------------
-# Database (Render PostgreSQL via DATABASE_URL)
+# Database Configuration
 # -------------------------------------------------
-DATABASES = {
-    'default': dj_database_url.config(
-        default=os.environ.get("DATABASE_URL"),
-        conn_max_age=600,
-        ssl_require=True
-    )
-}
+
+# If DATABASE_URL exists (Render production)
+if os.environ.get("DATABASE_URL"):
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=os.environ.get("DATABASE_URL"),
+            conn_max_age=600,
+            ssl_require=True
+        )
+    }
+else:
+    # Local Development (SQLite)
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # -------------------------------------------------
@@ -98,7 +110,11 @@ USE_TZ = True
 # Static Files
 # -------------------------------------------------
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [BASE_DIR / "static"]
+
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
