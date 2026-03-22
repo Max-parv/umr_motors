@@ -1,242 +1,263 @@
 {% extends "base.html" %} {% block content %}
 
-<h2 class="mb-4">Manage Bookings</h2>
+<div class="container py-5">
+  <h2 class="mb-4">
+    <i class="bi bi-clipboard-data me-2 text-warning"></i>
+    Manage Bookings
+  </h2>
 
-<!-- ================= SEARCH & FILTER ================= -->
-<form method="GET" class="row g-3 mb-4">
-  <div class="col-md-4">
-    <input
-      type="text"
-      name="search"
-      value="{{ search_query }}"
-      class="form-control"
-      placeholder="Search by name or vehicle"
-    />
+  <!-- ================= SEARCH & FILTER ================= -->
+  <form method="GET" class="row g-3 mb-4">
+    <div class="col-md-4">
+      <input
+        type="text"
+        name="search"
+        value="{{ search_query }}"
+        class="form-control"
+        placeholder="Search by name or vehicle"
+      />
+    </div>
+
+    <div class="col-md-3">
+      <select name="status" class="form-select">
+        <option value="">All Status</option>
+        <option
+          value="Pending"
+          {%
+          if
+          status_filter=""
+          ="Pending"
+          %}selected{%
+          endif
+          %}
+        >
+          Pending
+        </option>
+        <option
+          value="In Progress"
+          {%
+          if
+          status_filter=""
+          ="In Progress"
+          %}selected{%
+          endif
+          %}
+        >
+          In Progress
+        </option>
+        <option
+          value="Completed"
+          {%
+          if
+          status_filter=""
+          ="Completed"
+          %}selected{%
+          endif
+          %}
+        >
+          Completed
+        </option>
+      </select>
+    </div>
+
+    <div class="col-md-2">
+      <button type="submit" class="btn btn-dark w-100">Apply</button>
+    </div>
+  </form>
+
+  <!-- ================= SUCCESS MESSAGES ================= -->
+  {% if messages %} {% for message in messages %}
+  <div class="alert alert-success">{{ message }}</div>
+  {% endfor %} {% endif %}
+
+  <!-- ================= BOOKINGS TABLE ================= -->
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table align-middle table-hover">
+          <thead class="table-light">
+            <tr>
+              <th>Code</th>
+              <th>Name</th>
+              <th>Phone</th>
+              <th>Vehicle</th>
+              <th>Status</th>
+              <th>Completion</th>
+              <th>Amount (₹)</th>
+              <th width="250">Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {% for booking in page_obj %}
+            <tr>
+              <td>{{ booking.booking_code }}</td>
+              <td>{{ booking.name }}</td>
+              <td>{{ booking.phone }}</td>
+              <td>{{ booking.registration_number }}</td>
+
+              <td>
+                {% if booking.status == "Pending" %}
+                <span class="badge bg-danger">Pending</span>
+                {% elif booking.status == "In Progress" %}
+                <span class="badge bg-warning text-dark">In Progress</span>
+                {% else %}
+                <span class="badge bg-success">Completed</span>
+                {% endif %}
+              </td>
+
+              <td>
+                {% if booking.expected_completion_date %} {{
+                booking.expected_completion_date }} {% else %}
+                <span class="text-muted">Not Set</span>
+                {% endif %}
+              </td>
+
+              <td>
+                {% if booking.final_amount %} ₹ {{ booking.final_amount }} {%
+                else %}
+                <span class="text-muted">Not Set</span>
+                {% endif %}
+              </td>
+
+              <!-- ================= ACTIONS ================= -->
+              <td>
+                <!-- UPDATE FORM -->
+                <form method="POST" class="mb-2">
+                  {% csrf_token %}
+                  <input
+                    type="hidden"
+                    name="booking_id"
+                    value="{{ booking.id }}"
+                  />
+                  <input type="hidden" name="action" value="update" />
+
+                  <select name="status" class="form-select form-select-sm mb-2">
+                    <option
+                      value="Pending"
+                      {%
+                      if
+                      booking.status=""
+                      ="Pending"
+                      %}selected{%
+                      endif
+                      %}
+                    >
+                      Pending
+                    </option>
+
+                    <option
+                      value="In Progress"
+                      {%
+                      if
+                      booking.status=""
+                      ="In Progress"
+                      %}selected{%
+                      endif
+                      %}
+                    >
+                      In Progress
+                    </option>
+
+                    <option
+                      value="Completed"
+                      {%
+                      if
+                      booking.status=""
+                      ="Completed"
+                      %}selected{%
+                      endif
+                      %}
+                    >
+                      Completed
+                    </option>
+                  </select>
+
+                  <input
+                    type="date"
+                    name="expected_completion_date"
+                    class="form-control form-control-sm mb-2"
+                    value="{{ booking.expected_completion_date|date:'Y-m-d' }}"
+                  />
+
+                  <input
+                    type="number"
+                    step="0.01"
+                    name="final_amount"
+                    placeholder="Final Amount"
+                    class="form-control form-control-sm mb-2"
+                    value="{{ booking.final_amount }}"
+                  />
+
+                  <button type="submit" class="btn btn-sm btn-success w-100">
+                    Update
+                  </button>
+                </form>
+
+                <!-- DELETE FORM -->
+                <form method="POST">
+                  {% csrf_token %}
+                  <input
+                    type="hidden"
+                    name="booking_id"
+                    value="{{ booking.id }}"
+                  />
+                  <input type="hidden" name="action" value="delete" />
+
+                  <button
+                    type="submit"
+                    class="btn btn-sm btn-danger w-100"
+                    onclick="return confirm('Delete this booking?');"
+                  >
+                    Delete
+                  </button>
+                </form>
+              </td>
+            </tr>
+
+            {% empty %}
+            <tr>
+              <td colspan="8" class="text-center">No bookings found.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 
-  <div class="col-md-3">
-    <select name="status" class="form-select">
-      <option value="">All Status</option>
-      <option
-        value="Pending"
-        {%
-        if
-        status_filter=""
-        ="Pending"
-        %}selected{%
-        endif
-        %}
-      >
-        Pending
-      </option>
-      <option
-        value="In Progress"
-        {%
-        if
-        status_filter=""
-        ="In Progress"
-        %}selected{%
-        endif
-        %}
-      >
-        In Progress
-      </option>
-      <option
-        value="Completed"
-        {%
-        if
-        status_filter=""
-        ="Completed"
-        %}selected{%
-        endif
-        %}
-      >
-        Completed
-      </option>
-    </select>
-  </div>
+  <!-- ================= PAGINATION ================= -->
+  <nav class="mt-4">
+    <ul class="pagination justify-content-center">
+      {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a
+          class="page-link"
+          href="?page={{ page_obj.previous_page_number }}&search={{ search_query }}&status={{ status_filter }}"
+        >
+          Previous
+        </a>
+      </li>
+      {% endif %}
 
-  <div class="col-md-2">
-    <button type="submit" class="btn btn-primary w-100">Apply</button>
-  </div>
-</form>
+      <li class="page-item active">
+        <span class="page-link">
+          Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+        </span>
+      </li>
 
-<!-- ================= BOOKINGS TABLE ================= -->
-<div class="card shadow-sm">
-  <div class="card-body">
-    <table class="table align-middle">
-      <thead class="table-light">
-        <tr>
-          <th>Name</th>
-          <th>Phone</th>
-          <th>Vehicle</th>
-          <th>Status</th>
-          <th>Completion</th>
-          <th>Amount (₹)</th>
-          <th width="260">Actions</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        {% for booking in page_obj %}
-        <tr>
-          <td>{{ booking.name }}</td>
-          <td>{{ booking.phone }}</td>
-          <td>{{ booking.registration_number }}</td>
-
-          <!-- STATUS BADGE -->
-          <td>
-            {% if booking.status == "Pending" %}
-            <span class="badge bg-danger">Pending</span>
-            {% elif booking.status == "In Progress" %}
-            <span class="badge bg-warning text-dark">In Progress</span>
-            {% else %}
-            <span class="badge bg-success">Completed</span>
-            {% endif %}
-          </td>
-
-          <!-- COMPLETION DATE -->
-          <td>
-            {% if booking.expected_completion_date %} {{
-            booking.expected_completion_date }} {% else %}
-            <span class="text-muted">Not Set</span>
-            {% endif %}
-          </td>
-
-          <!-- FINAL AMOUNT DISPLAY -->
-          <td>
-            {% if booking.final_amount %} ₹ {{ booking.final_amount }} {% else
-            %}
-            <span class="text-muted">Not Set</span>
-            {% endif %}
-          </td>
-
-          <!-- ACTIONS -->
-          <td>
-            <!-- UPDATE FORM -->
-            <form method="POST" class="mb-2">
-              {% csrf_token %}
-              <input type="hidden" name="booking_id" value="{{ booking.id }}" />
-              <input type="hidden" name="action" value="update" />
-
-              <select name="status" class="form-select form-select-sm mb-2">
-                <option
-                  value="Pending"
-                  {%
-                  if
-                  booking.status=""
-                  ="Pending"
-                  %}selected{%
-                  endif
-                  %}
-                >
-                  Pending
-                </option>
-                <option
-                  value="In Progress"
-                  {%
-                  if
-                  booking.status=""
-                  ="In Progress"
-                  %}selected{%
-                  endif
-                  %}
-                >
-                  In Progress
-                </option>
-                <option
-                  value="Completed"
-                  {%
-                  if
-                  booking.status=""
-                  ="Completed"
-                  %}selected{%
-                  endif
-                  %}
-                >
-                  Completed
-                </option>
-              </select>
-
-              <input
-                type="date"
-                name="expected_completion_date"
-                class="form-control form-control-sm mb-2"
-                value="{{ booking.expected_completion_date|date:'Y-m-d' }}"
-              />
-
-              <input
-                type="number"
-                step="0.01"
-                name="final_amount"
-                placeholder="Final Amount (₹)"
-                class="form-control form-control-sm mb-2"
-                value="{{ booking.final_amount }}"
-              />
-
-              <button type="submit" class="btn btn-sm btn-success w-100">
-                Update
-              </button>
-            </form>
-
-            <!-- DELETE FORM -->
-            <form method="POST">
-              {% csrf_token %}
-              <input type="hidden" name="booking_id" value="{{ booking.id }}" />
-              <input type="hidden" name="action" value="delete" />
-
-              <button
-                type="submit"
-                class="btn btn-sm btn-danger w-100"
-                onclick="return confirm('Delete this booking?');"
-              >
-                Delete
-              </button>
-            </form>
-          </td>
-        </tr>
-
-        {% empty %}
-        <tr>
-          <td colspan="7" class="text-center">No bookings found.</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
+      {% if page_obj.has_next %}
+      <li class="page-item">
+        <a
+          class="page-link"
+          href="?page={{ page_obj.next_page_number }}&search={{ search_query }}&status={{ status_filter }}"
+        >
+          Next
+        </a>
+      </li>
+      {% endif %}
+    </ul>
+  </nav>
 </div>
-
-<!-- ================= PAGINATION ================= -->
-<nav class="mt-4">
-  <ul class="pagination justify-content-center">
-    {% if page_obj.has_previous %}
-    <li class="page-item">
-      <a
-        class="page-link"
-        href="?page={{ page_obj.previous_page_number }}&search={{ search_query }}&status={{ status_filter }}"
-      >
-        Previous
-      </a>
-    </li>
-    {% endif %}
-
-    <li class="page-item active">
-      <span class="page-link">
-        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
-      </span>
-    </li>
-
-    {% if page_obj.has_next %}
-    <li class="page-item">
-      <a
-        class="page-link"
-        href="?page={{ page_obj.next_page_number }}&search={{ search_query }}&status={{ status_filter }}"
-      >
-        Next
-      </a>
-    </li>
-    {% endif %}
-  </ul>
-</nav>
 
 {% endblock %}

@@ -1,12 +1,17 @@
-{% load static %}
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>U.M.R Motors</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- Bootstrap CSS -->
+    <!-- Google Font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Bootstrap -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -16,41 +21,201 @@
       rel="stylesheet"
     />
 
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f8f9fb;
+        color: #111;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* ================= NAVBAR ================= */
+
+      .navbar {
+        background: #ffffff !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+        padding: 15px 30px;
+      }
+
+      .navbar-brand {
+        font-weight: 800;
+        font-size: 1.3rem;
+        letter-spacing: 1px;
+      }
+
+      .nav-btn {
+        border-radius: 30px;
+        padding: 6px 18px;
+        font-weight: 500;
+        margin-left: 8px;
+      }
+
+      /* ================= HERO SECTION ================= */
+
+      .hero-section {
+        border-radius: 25px;
+        padding: 120px 40px;
+        background:
+          linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+          url("https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=2070")
+            center/cover;
+        color: white;
+      }
+
+      .hero-title {
+        font-size: 3.5rem;
+        font-weight: 800;
+        letter-spacing: 1px;
+      }
+
+      .hero-subtitle {
+        font-size: 1.4rem;
+        font-weight: 400;
+        opacity: 0.9;
+      }
+
+      .btn-primary-soft {
+        background: #111;
+        border: none;
+        padding: 14px 35px;
+        border-radius: 40px;
+        font-weight: 600;
+        color: white;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+      }
+
+      .btn-primary-soft:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+      }
+
+      /* ================= CARDS ================= */
+
+      .premium-card {
+        border: none;
+        border-radius: 20px;
+        background: #ffffff;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+        transition: 0.3s ease;
+      }
+
+      .premium-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+      }
+
+      /* ================= SECTIONS ================= */
+
+      section {
+        padding: 80px 0;
+      }
+
+      /* ================= FOOTER ================= */
+
+      footer {
+        background: #ffffff;
+        border-top: 1px solid #eee;
+        padding: 50px 0;
+        margin-top: 80px;
+        color: #666;
+      }
+
+      footer h5 {
+        font-weight: 700;
+        color: #111;
+      }
+
+      footer a {
+        color: #111;
+        text-decoration: none;
+      }
+
+      footer a:hover {
+        text-decoration: underline;
+      }
+
+      /* ================= WHATSAPP FLOAT ================= */
+
+      .whatsapp-float {
+        position: fixed;
+        width: 60px;
+        height: 60px;
+        bottom: 25px;
+        right: 25px;
+        background-color: #25d366;
+        color: #fff;
+        border-radius: 50%;
+        text-align: center;
+        font-size: 28px;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: 0.3s;
+      }
+
+      .whatsapp-float:hover {
+        transform: scale(1.1);
+        text-decoration: none;
+        color: white;
+      }
+
+      /* ================= RESPONSIVE ================= */
+
+      @media (max-width: 768px) {
+        .hero-title {
+          font-size: 2.2rem;
+        }
+
+        .hero-section {
+          padding: 80px 20px;
+        }
+      }
+    </style>
   </head>
 
   <body>
     <!-- ================= NAVBAR ================= -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
-      <div class="container-fluid">
-        <a class="navbar-brand fw-bold" href="/">
-          <i class="bi bi-gear-fill text-warning me-2"></i>
+
+    <nav class="navbar navbar-expand-lg navbar-light">
+      <div class="container">
+        <a class="navbar-brand" href="/">
+          <i class="bi bi-gear-fill me-2 text-dark"></i>
           U.M.R Motors
         </a>
 
-        <div class="ms-auto">
-          <a href="/" class="btn btn-outline-light me-2"> Home </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
 
-          <a href="{% url 'booking' %}" class="btn btn-warning me-2">
+        <div
+          class="collapse navbar-collapse justify-content-end"
+          id="navbarNav"
+        >
+          <a href="/" class="btn btn-outline-dark nav-btn">Home</a>
+
+          <a href="{% url 'booking' %}" class="btn btn-dark nav-btn">
             Book Service
           </a>
 
-          <a href="{% url 'customer_login' %}" class="btn btn-info me-2">
+          <a
+            href="{% url 'customer_login' %}"
+            class="btn btn-outline-dark nav-btn"
+          >
             Track
           </a>
 
           {% if user.is_authenticated %}
-          <a href="{% url 'dashboard' %}" class="btn btn-success me-2">
-            Dashboard
-          </a>
-
-          <a href="{% url 'workshop_logout' %}" class="btn btn-outline-danger">
-            Logout
-          </a>
-          {% else %}
-          <a href="{% url 'workshop_login' %}" class="btn btn-danger">
-            Workshop Login
+          <a href="{% url 'manage_bookings' %}" class="btn btn-dark nav-btn">
+            Admin
           </a>
           {% endif %}
         </div>
@@ -58,31 +223,34 @@
     </nav>
 
     <!-- ================= PAGE CONTENT ================= -->
-    <div class="container mt-5 fade-in">{% block content %} {% endblock %}</div>
+
+    <div class="container mt-5">{% block content %}{% endblock %}</div>
 
     <!-- ================= FOOTER ================= -->
-    <footer class="text-center">
-      <div class="container">
-        <h4 class="fw-bold mb-3">U.M.R Motors</h4>
+
+    <footer>
+      <div class="container text-center">
+        <h5>U.M.R Motors</h5>
         <p>Complete Car Care Solution</p>
 
         <p>
-          <i class="bi bi-geo-alt-fill text-danger me-2"></i>
+          <i class="bi bi-geo-alt-fill text-danger"></i>
           Khasra No-217/1,218/1, Bagli Road, Misrod, Bhopal
         </p>
 
         <p>
-          <i class="bi bi-telephone-fill text-warning me-2"></i>
+          <i class="bi bi-telephone-fill"></i>
           <a href="tel:9714004120">9714004120</a> |
           <a href="tel:9575589976">9575589976</a>
         </p>
 
-        <p class="mt-4">© 2026 U.M.R Motors | All Rights Reserved</p>
+        <p class="mt-3">© 2026 U.M.R Motors | All Rights Reserved</p>
       </div>
     </footer>
 
-    <!-- ================= WHATSAPP FLOAT ================= -->
-    <a href="https://wa.me/919174004120" target="_blank" class="whatsapp-float">
+    <!-- ================= WHATSAPP BUTTON ================= -->
+
+    <a href="https://wa.me/919714004120" class="whatsapp-float" target="_blank">
       <i class="bi bi-whatsapp"></i>
     </a>
 

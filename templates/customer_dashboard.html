@@ -1,40 +1,88 @@
 {% extends "base.html" %} {% block content %}
 
-<div class="card premium-card p-4">
-  <h3 class="mb-3"><i class="bi bi-tools me-2"></i> Your Booking Status</h3>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-body p-5">
+          <h3 class="mb-4">
+            <i class="bi bi-tools me-2 text-warning"></i>
+            Booking Results
+          </h3>
 
-  <p class="text-muted"><strong>Mobile:</strong> {{ phone }}</p>
+          <p class="text-muted mb-4">
+            Showing results for:
+            <strong>{{ query }}</strong>
+          </p>
 
-  <table class="table table-hover mt-4 align-middle">
-    <thead class="table-dark">
-      <tr>
-        <th><i class="bi bi-car-front"></i> Vehicle</th>
-        <th><i class="bi bi-chat-left-text"></i> Problem</th>
-        <th><i class="bi bi-check-circle"></i> Status</th>
-        <th><i class="bi bi-calendar-event"></i> Date</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for booking in bookings %}
-      <tr>
-        <td>{{ booking.vehicle_type }}</td>
-        <td>{{ booking.problem_description }}</td>
-        <td>
-          {% if booking.status == "Pending" %}
-          <span class="badge bg-danger px-3 py-2">Pending</span>
-          {% elif booking.status == "In Progress" %}
-          <span class="badge bg-warning text-dark px-3 py-2">In Progress</span>
-          {% elif booking.status == "Completed" %}
-          <span class="badge bg-success px-3 py-2">Completed</span>
-          {% endif %}
-        </td>
-        <td>{{ booking.booking_date|date:"d M Y - h:i A" }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+          <div class="table-responsive">
+            <table class="table align-middle table-hover">
+              <thead class="table-dark">
+                <tr>
+                  <th>Booking Code</th>
+                  <th>Vehicle</th>
+                  <th>Problem</th>
+                  <th>Status</th>
+                  <th>Expected Completion</th>
+                  <th>Amount</th>
+                  <th>Date</th>
+                </tr>
+              </thead>
 
-  <a href="/track/" class="btn btn-outline-secondary mt-3"> Back </a>
+              <tbody>
+                {% for booking in bookings %}
+                <tr>
+                  <td>{{ booking.booking_code }}</td>
+                  <td>{{ booking.vehicle_type }}</td>
+                  <td>{{ booking.problem_description }}</td>
+
+                  <td>
+                    {% if booking.status == "Pending" %}
+                    <span class="badge bg-danger">Pending</span>
+                    {% elif booking.status == "In Progress" %}
+                    <span class="badge bg-warning text-dark">In Progress</span>
+                    {% else %}
+                    <span class="badge bg-success">Completed</span>
+                    {% endif %}
+                  </td>
+
+                  <td>
+                    {% if booking.expected_completion_date %} {{
+                    booking.expected_completion_date }} {% else %}
+                    <span class="text-muted">Not Set</span>
+                    {% endif %}
+                  </td>
+
+                  <td>
+                    {% if booking.final_amount %} ₹ {{ booking.final_amount }}
+                    {% else %}
+                    <span class="text-muted">Not Finalized</span>
+                    {% endif %}
+                  </td>
+
+                  <td>{{ booking.created_at|date:"d M Y H:i" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                  <td colspan="7" class="text-center">No bookings found.</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+          <div class="mt-4">
+            <a
+              href="{% url 'customer_login' %}"
+              class="btn btn-outline-secondary"
+            >
+              Back
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 {% endblock %}

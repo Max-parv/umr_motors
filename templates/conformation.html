@@ -1,11 +1,53 @@
-<div class="booking-card">
-  <h2>Booking Confirmed ✅</h2>
+{% extends "base.html" %} {% block content %}
 
-  <p><strong>Booking ID:</strong> {{ booking.booking_id }}</p>
-  <p><strong>Status:</strong> {{ booking.status }}</p>
-  <p><strong>Vehicle:</strong> {{ booking.registration_number }}</p>
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow-lg border-0 rounded-4 text-center">
+        <div class="card-body p-5">
+          <i
+            class="bi bi-check-circle-fill text-success"
+            style="font-size: 60px"
+          ></i>
 
-  <p>We will contact you shortly.</p>
+          <h3 class="mt-4 mb-3">Booking Confirmed!</h3>
 
-  <a href="/track/">Track Your Booking</a>
+          <p class="text-muted">
+            Thank you for choosing <strong>U.M.R Motors</strong>.
+          </p>
+
+          <div class="alert alert-light border mt-4">
+            <p class="mb-2">
+              <strong>Booking Code:</strong><br />
+              <span class="fs-5 text-dark"> {{ booking.booking_code }} </span>
+            </p>
+
+            <p class="mb-1">
+              <strong>Status:</strong>
+              <span class="badge bg-danger"> {{ booking.status }} </span>
+            </p>
+          </div>
+
+          <p class="small text-muted mt-3">
+            Please save your booking code for tracking.
+          </p>
+
+          <div class="mt-4">
+            <a
+              href="{% url 'customer_login' %}"
+              class="btn btn-outline-dark me-2"
+            >
+              Track Booking
+            </a>
+
+            <a href="{% url 'home' %}" class="btn btn-warning">
+              Back to Home
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
+{% endblock %}
